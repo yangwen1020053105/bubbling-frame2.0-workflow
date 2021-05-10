@@ -1,0 +1,8 @@
+/bubbling-front/yarn-error.log
+/bubbling-front/.idea
+/bubbling-front/dist
+/bubbling-front/node_modules
+/bubbling-front/yarn.lock
+/bubbling-service/bubbling-service.iml
+/bubbling-service/.idea
+/bubbling-service/target
