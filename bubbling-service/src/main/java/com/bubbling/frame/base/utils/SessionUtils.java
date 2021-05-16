@@ -1,7 +1,6 @@
-package com.bubbling.frame.base.tools;
+package com.bubbling.frame.base.utils;
 
 import com.bubbling.frame.entity.TAcUser;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.*;
 
@@ -14,7 +13,7 @@ import java.util.*;
 public class SessionUtils {
 
     //登录后存放token和user
-    private static Map<String, TAcUser> sessionMap=new HashMap<>();
+    public static Map<String, TAcUser> sessionMap=new HashMap<>();
     public static void setUser(String token,TAcUser user){
         sessionMap.put(token,user);
     }
@@ -22,7 +21,7 @@ public class SessionUtils {
         return sessionMap.get(token);
     }
     //存放token过期时间
-    private static Map<String, Long> sessionTimeOutMap=new HashMap<>();
+    public static Map<String, Long> sessionTimeOutMap=new HashMap<>();
     public static void setSessionTimeOut(Long timeOut,String token){
         sessionTimeOutMap.put(token,timeOut);
     }

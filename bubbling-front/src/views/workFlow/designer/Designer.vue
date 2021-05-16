@@ -4,7 +4,10 @@
     <div id="js-properties-panel" class="panel"></div>
     <ul class="buttons">
       <li>
-        <a ref="saveDiagram" @click="saveDiagram" href="javascript:" title="保存为bpmn">保存为bpmn</a>
+        <a ref="saveDiagram" @click="saveDiagram" href="javascript:" title="下载为bpmn">保存为bpmn</a>
+      </li>
+      <li>
+        <a ref="deploymentProcess" @click="deploymentProcess" href="javascript:" title="部署流程">部署流程</a>
       </li>
       <li>
         <a ref="saveSvg" href="javascript:" title="保存为svg">保存为svg</a>
@@ -18,14 +21,14 @@ import propertiesPanelModule from 'bpmn-js-properties-panel'
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda'
 import activitiModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda'
 import customTranslate from './customTranslate';
-import { xmlStr } from './xmlStr'
 var viewer=null;
 export default {
   data () {
     return {
       // bpmn建模器
       container: null,
-      canvas: null
+      canvas: null,
+      key:null,
     }
   },
   mounted() {
@@ -57,13 +60,22 @@ export default {
   },
   methods:{
     createNewDiagram(){
-      viewer.importXML(xmlStr, (err)=>{
-        if (!err) {
-          viewer.get('canvas').zoom('fit-viewport')
-        } else {
-          console.log('something went wrong:', err)
+      var query=this.$route.query;
+      this.key=query.key;
+      const param={};
+      param.key=this.key;
+      this.axios.post("/proxyService/flowDefService/queryFlowDefXml",param).then((res)=>{
+        if(res.rtnCode==200){
+          viewer.importXML(res.data, (err)=>{
+            if (!err) {
+              viewer.get('canvas').zoom('fit-viewport')
+            } else {
+              console.log('something went wrong:', err)
+            }
+          })
         }
       })
+
     },
     addEventBusListener() {
       // 监听 element
@@ -84,6 +96,18 @@ export default {
           }
         })
       })
+    },
+    deploymentProcess(){
+      viewer.saveXML({ format: true }, (err, xml) =>{
+        const param={}
+        param.bpmn=xml;
+        param.key=this.key;
+        this.axios.post("/proxyService/flowDefService/updateProcess",param).then((res)=>{
+          if(res.rtnCode==200){
+            this.$message.success("部署成功")
+          }
+        })
+      });
     },
     saveDiagram(){
       const downloadLink = this.$refs.saveDiagram

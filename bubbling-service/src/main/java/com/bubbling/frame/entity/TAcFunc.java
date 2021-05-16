@@ -19,6 +19,7 @@ public class TAcFunc implements java.io.Serializable {
 	private String funcName;
 	private String viewPath;
 	private String imagePath;
+	private Integer funcOrder;
 	@TableField(fill = FieldFill.INSERT)
 	private String createUser;
 	@TableField(fill = FieldFill.INSERT)

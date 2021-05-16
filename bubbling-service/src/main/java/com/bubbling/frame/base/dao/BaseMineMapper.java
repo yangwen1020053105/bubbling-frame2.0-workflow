@@ -1,4 +1,4 @@
-package com.bubbling.frame.base.mapper;
+package com.bubbling.frame.base.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;

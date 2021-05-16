@@ -1,4 +1,4 @@
-const gateway="http://127.0.0.1:8083/";
+const gateway="http://localhost:8083/";
 const methods={
     /**
      * 获取当前时间yyyy-MM-dd hh:mm:ss.SSS

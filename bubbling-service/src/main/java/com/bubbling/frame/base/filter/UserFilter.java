@@ -1,16 +1,11 @@
 package com.bubbling.frame.base.filter;
 
-import com.bubbling.frame.base.bean.ResponseBean;
-import com.bubbling.frame.base.constants.SrvConstants;
-import com.bubbling.frame.base.tools.BaseUtils;
-import com.bubbling.frame.base.tools.SessionUtils;
-import com.bubbling.frame.entity.TAcUser;
+import com.bubbling.frame.base.utils.SessionUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 
 /**
  * @title: UserFilter

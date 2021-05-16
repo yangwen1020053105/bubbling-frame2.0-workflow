@@ -8,14 +8,13 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.bubbling.frame.base.bean.ResponseBean;
-import com.bubbling.frame.base.tools.SessionUtils;
-import com.bubbling.frame.mapper.*;
-import com.mysql.cj.Session;
+import com.bubbling.frame.base.utils.SessionUtils;
+import com.bubbling.frame.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bubbling.frame.base.service.impl.BaseService;
-import com.bubbling.frame.base.tools.BaseUtils;
+import com.bubbling.frame.base.utils.BaseUtils;
 import com.bubbling.frame.entity.TAcFunc;
 import com.bubbling.frame.entity.TAcOrg;
 import com.bubbling.frame.entity.TAcRole;
@@ -49,6 +48,7 @@ public class FrameService extends BaseService implements IFrameService {
     public ResponseBean getFuncList(Map<String, Object> map) throws Exception {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("is_valid", 1);
+        wrapper.orderByAsc("func_order");
         List<TAcFunc> list = tAcFuncMapper.selectList(wrapper);
         return ResponseBean.success(list);
     }

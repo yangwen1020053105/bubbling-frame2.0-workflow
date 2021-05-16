@@ -1,9 +1,8 @@
-package com.bubbling.frame.base.tools;
+package com.bubbling.frame.base.utils;
 
 
 
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang3.ArrayUtils;

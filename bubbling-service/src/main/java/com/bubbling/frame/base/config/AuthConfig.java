@@ -1,16 +1,10 @@
 package com.bubbling.frame.base.config;
 
 import com.bubbling.frame.base.filter.UserFilter;
-import com.bubbling.frame.base.tools.ApplicationUtils;
-import org.springframework.beans.factory.annotation.Value;
+import com.bubbling.frame.base.utils.ApplicationUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @title: 权限拦截器

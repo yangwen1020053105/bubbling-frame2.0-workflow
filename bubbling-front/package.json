@@ -8,8 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "activiti-bpmn-moddle": "^4.4.0",
     "ant-design-vue": "^2.1.2",
     "axios": "^0.21.1",
+    "bpmn-js": "^8.5.0",
+    "bpmn-js-properties-panel": "^0.43.0",
+    "camunda-bpmn-moddle": "^5.1.2",
     "core-js": "^3.6.5",
     "js-cookie": "^2.2.1",
     "jsencrypt": "^3.1.0",

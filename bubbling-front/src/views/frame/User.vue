@@ -29,8 +29,8 @@
   <!--  添加和修改表单-->
   <a-modal v-model:visible="addAndUpdateVisible"  width="700px" title="用户信息" @ok="addAndUpdate">
     <a-form ref="form" :model="userInfo" :label-col="{ span: 4 }" :wrapper-col="{ span: 14 }" :rules="{
-              loginName: [{ required: true, message: 'Please input Activity name', trigger: 'blur' }],
-              userName: [{ required: true, message: 'Please input Activity name', trigger: 'blur' }],
+              loginName: [{ required: true, message: '请输入登录名', trigger: 'blur' }],
+              userName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
               }">
       <a-form-item name="loginName" label="账号">
         <a-input v-model:value="userInfo.loginName" />

@@ -1,4 +1,4 @@
-package com.bubbling.frame.base.tools;
+package com.bubbling.frame.base.utils;
 
 import java.util.Calendar;
 import java.util.Date;

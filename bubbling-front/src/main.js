@@ -44,7 +44,7 @@ axios.interceptors.response.use(function (response) {
     if(response.data==1100||response.data.rtnCode==1100){
         //未登录跳转登录界面
         window.location.href="/login";
-    }else if(response.data.rtnCode!=200&&response.data.rtnCode!=1100){
+    }else if(response.data.rtnCode!=null&&response.data.rtnCode!=200&&response.data.rtnCode!=1100){
         message.error(response.rtnMsg);
     }
     return response.data;

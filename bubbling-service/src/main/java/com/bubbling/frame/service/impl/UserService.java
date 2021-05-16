@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bubbling.frame.entity.TAcUser;
-import com.bubbling.frame.mapper.TAcUserMapper;
+import com.bubbling.frame.dao.TAcUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

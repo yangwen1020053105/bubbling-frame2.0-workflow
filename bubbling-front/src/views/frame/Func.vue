@@ -9,13 +9,22 @@
       <b-card title="编辑">
         <a-form :model="funcData" :label-col="{ span: 4 }" :wrapper-col="{ span: 14 }">
           <a-form-item label="菜单名称">
+            <a-input v-model:value="funcData.id" />
+          </a-form-item>
+          <a-form-item label="菜单名称">
             <a-input v-model:value="funcData.funcName" />
+          </a-form-item>
+          <a-form-item label="上级节点">
+            <a-input v-model:value="funcData.pid" />
           </a-form-item>
           <a-form-item label="菜单路径">
             <a-input v-model:value="funcData.viewPath" />
           </a-form-item>
           <a-form-item label="图标代码">
             <a-input v-model:value="funcData.imagePath" />
+          </a-form-item>
+          <a-form-item label="顺序">
+            <a-input v-model:value="funcData.funcOrder" />
           </a-form-item>
           <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
             <a-space>
@@ -49,6 +58,7 @@ export default {
       this.axios.post("/proxyService/frameService/saveOrUpdateFunc",param).then((res)=>{
         if(res.rtnCode==200){
           this.$refs.func.getFuncData();
+          this.$message.success("添加成功");
         }
       })
     },
@@ -56,6 +66,7 @@ export default {
       this.axios.post("/proxyService/frameService/saveOrUpdateFunc",this.funcData).then((res)=>{
         if(res.rtnCode==200){
           this.$refs.func.getFuncData();
+          this.$message.success("修改成功");
         }
       })
     },
@@ -63,6 +74,7 @@ export default {
       this.axios.post("/proxyService/frameService/delFunc",this.funcData).then((res)=>{
         if(res.rtnCode==200){
           this.$refs.func.getFuncData();
+          this.$message.success("删除成功");
         }
       })
     },
@@ -75,6 +87,7 @@ export default {
         funcName:null,
         viewPath:null,
         imagePath:null,
+        funcOrder:null,
       },
     }
   },

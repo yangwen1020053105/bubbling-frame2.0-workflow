@@ -6,6 +6,10 @@ import func from "@/views/frame/Func";
 import org from "@/views/frame/Org";
 import role from "@/views/frame/Role";
 import user from "@/views/frame/User";
+import Designer from "@/views/workFlow/designer/Designer";
+import FlowDef from "@/views/workFlow/FlowDef";
+import FlowInst from "@/views/workFlow/FlowInst";
+import ActiveInst from "@/views/workFlow/ActiveInst";
 
 const routerHistory = createWebHistory()
 const router = createRouter({
@@ -14,7 +18,7 @@ const router = createRouter({
         {path: '/', component: home},
         {path: '/login', component: login},
         {path: '/test', component: test},
-        {path: '/user', component: user},
+        {path: '/designer', component: Designer},
         {path: '/home', component: home,
             children: [
                 //测试页面
@@ -22,6 +26,9 @@ const router = createRouter({
                 {path: 'org', component: org},
                 {path: 'role', component: role},
                 {path: 'user', component: user},
+                {path: 'flowDef', component: FlowDef},
+                {path: 'flowInst', component: FlowInst},
+                {path: 'activeInst', component: ActiveInst},
             ]
         },
 

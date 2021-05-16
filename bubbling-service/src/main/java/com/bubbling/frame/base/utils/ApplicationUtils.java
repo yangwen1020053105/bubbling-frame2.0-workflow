@@ -1,4 +1,4 @@
-package com.bubbling.frame.base.tools;
+package com.bubbling.frame.base.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
