@@ -3,6 +3,7 @@ package com.bubbling.frame.base.utils;
 
 
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang3.ArrayUtils;
@@ -219,7 +220,8 @@ public class BaseUtils {
 	 *@Date:2021-04-11 13:00
 	 */
 	public static Map<String,Object> objectToMap(Object object) throws Exception {
-		return com.baomidou.mybatisplus.core.toolkit.BeanUtils.beanToMap(object);
+		Map<String,Object> map = JSONObject.parseObject(JSONObject.toJSONString(object), Map.class);
+		return map;
 	}
 	/**
 	 * 获取树根节点数据

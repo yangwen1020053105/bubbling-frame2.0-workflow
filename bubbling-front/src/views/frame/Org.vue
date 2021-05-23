@@ -8,6 +8,12 @@
     <a-col :span="18">
       <b-card title="编辑">
         <a-form :model="orgData" :label-col="{ span: 4 }" :wrapper-col="{ span: 14 }">
+          <a-form-item label="id">
+            <a-input v-model:value="orgData.id" disabled="true" />
+          </a-form-item>
+          <a-form-item label="上级id">
+            <a-input v-model:value="orgData.pid"  />
+          </a-form-item>
           <a-form-item label="部门名称">
             <a-input v-model:value="orgData.orgName" />
           </a-form-item>

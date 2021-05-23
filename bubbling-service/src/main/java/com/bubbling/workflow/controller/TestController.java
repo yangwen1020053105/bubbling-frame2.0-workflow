@@ -5,6 +5,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,10 +36,11 @@ public class TestController {
      */
     @GetMapping("/startFlow")
     public String startFlow(){
-        String flowCode="myProcess";//流程定义code
-        String businessKey="1000";//业务数据id
+        String flowCode="holiday";//流程定义code
+        String businessKey="8886";//业务数据id
         Map<String,Object> assigneeMap = new HashMap<>();
         assigneeMap.put("org","activitiTeam");//设置操作部门为activitiTeam
+        assigneeMap.put("scUser","128f0cef30bb5de95bfbd58dc2ca3114");//设置操作部门为activitiTeam
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(flowCode,businessKey,assigneeMap);//启动流程
         System.out.println("启动成功，流程实例id："+processInstance.getId()+"业务id："+processInstance.getBusinessKey());
         return "启动成功，流程实例id："+processInstance.getId()+"业务id："+processInstance.getBusinessKey();
@@ -154,6 +156,15 @@ public class TestController {
         taskService.complete(taskId,map);
         System.out.println("完成任务："+taskId);
         return "请查看日志";
+    }
+    @GetMapping("/test")
+    public String test(){
+        TaskQuery taskQuery = taskService.createTaskQuery();
+        taskQuery.processInstanceBusinessKey("8886");
+        taskQuery.taskAssignee("128f0cef30bb5de95bfbd58dc2ca3114");
+//        taskQuery.taskCandidateGroup("activitiTeam");
+        List<Task> list = taskQuery.list();
+        return list.get(0).getAssignee()+" "+list.size();
     }
 }
 

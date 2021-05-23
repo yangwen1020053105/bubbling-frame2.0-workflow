@@ -1,5 +1,6 @@
 package com.bubbling.frame.base.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -23,5 +24,16 @@ public class DateUtils {
         calendar.setTime(date);
         calendar.add(Calendar.HOUR,hours);
         return calendar.getTime();
+    }
+    /**
+     *格式化时间
+     *@param date
+     *@Return:java.lang.String
+     *@Author:dc_yangwen
+     *@Date:2021-05-23 21:13
+     */
+    public static String dateToyyyyMMddhhssmm(Date date){
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        return simpleDateFormat.format(date);
     }
 }

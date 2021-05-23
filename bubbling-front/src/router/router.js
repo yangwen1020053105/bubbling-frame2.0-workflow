@@ -9,7 +9,6 @@ import user from "@/views/frame/User";
 import Designer from "@/views/workFlow/designer/Designer";
 import FlowDef from "@/views/workFlow/FlowDef";
 import FlowInst from "@/views/workFlow/FlowInst";
-import ActiveInst from "@/views/workFlow/ActiveInst";
 
 const routerHistory = createWebHistory()
 const router = createRouter({
@@ -28,7 +27,6 @@ const router = createRouter({
                 {path: 'user', component: user},
                 {path: 'flowDef', component: FlowDef},
                 {path: 'flowInst', component: FlowInst},
-                {path: 'activeInst', component: ActiveInst},
             ]
         },
 

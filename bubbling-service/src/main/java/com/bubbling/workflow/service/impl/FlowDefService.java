@@ -1,20 +1,26 @@
 package com.bubbling.workflow.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bubbling.frame.base.bean.ResponseBean;
 import com.bubbling.frame.base.utils.BaseUtils;
 import com.bubbling.frame.base.utils.IoUtils;
-import com.bubbling.workflow.dao.TActBytearrayVersionMapper;
-import com.bubbling.workflow.entity.TActBytearrayVersion;
+import com.bubbling.workflow.dao.TActDeploymentMapper;
+import com.bubbling.workflow.entity.TActDeployment;
 import com.bubbling.workflow.service.IFlowDefService;
+import org.activiti.bpmn.converter.BpmnXMLConverter;
+import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * @title: 流程图设计
@@ -27,7 +33,7 @@ public class FlowDefService implements IFlowDefService {
     @Autowired
     private RepositoryService repositoryService;
     @Autowired
-    private TActBytearrayVersionMapper tActBytearrayVersionMapper;
+    private TActDeploymentMapper tActDeploymentMapper;
     /**
      *部署流程
      *@param map xml:流程信息
@@ -42,59 +48,74 @@ public class FlowDefService implements IFlowDefService {
         String key=(String) map.get("key");
         String name=(String) map.get("name");
         String bpmn="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<definitions xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:omgdi=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:omgdc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" id=\"sid-38422fae-e03e-43a3-bef4-bd33b32041b2\" targetNamespace=\"http://bpmn.io/bpmn\" exporter=\"bpmn-js (https://demo.bpmn.io)\" exporterVersion=\"5.1.2\">\n" +
-                "  <process id=\""+key+"\" name=\""+name+"\" isExecutable=\"true\">\n" +
-                "    <startEvent id=\"StartEvent_1y45yut\" name=\"开始\">\n" +
+                "<definitions xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:activiti=\"http://activiti.org/bpmn\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:omgdc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:omgdi=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:tns=\"http://www.activiti.org/test\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" expressionLanguage=\"http://www.w3.org/1999/XPath\" id=\"m1621667210359\" name=\"\" targetNamespace=\"http://www.activiti.org/test\" typeLanguage=\"http://www.w3.org/2001/XMLSchema\">\n" +
+                "  <process id=\"holiday\" name=\"请假\" isExecutable=\"true\">\n" +
+                "    <startEvent id=\"start\" name=\"开始\">\n" +
                 "      <outgoing>SequenceFlow_0h21x7r</outgoing>\n" +
                 "    </startEvent>\n" +
-                "    <task id=\"test\" name=\"测试\">\n" +
+                "    <sequenceFlow id=\"SequenceFlow_0h21x7r\" sourceRef=\"start\" targetRef=\"sc\" />\n" +
+                "    <userTask id=\"sc\" name=\"审查\" activiti:assignee=\"${scUser}\" activiti:candidateGroups=\"${org}\">\n" +
                 "      <incoming>SequenceFlow_0h21x7r</incoming>\n" +
-                "      <outgoing>Flow_0mnt4ho</outgoing>\n" +
-                "    </task>\n" +
-                "    <sequenceFlow id=\"SequenceFlow_0h21x7r\" sourceRef=\"StartEvent_1y45yut\" targetRef=\"test\" />\n" +
-                "    <intermediateThrowEvent id=\"Event_11k45g9\">\n" +
-                "      <incoming>Flow_0mnt4ho</incoming>\n" +
-                "    </intermediateThrowEvent>\n" +
-                "    <sequenceFlow id=\"Flow_0mnt4ho\" sourceRef=\"test\" targetRef=\"Event_11k45g9\" />\n" +
+                "      <outgoing>Flow_1xex6al</outgoing>\n" +
+                "    </userTask>\n" +
+                "    <sequenceFlow id=\"Flow_1xex6al\" sourceRef=\"sc\" targetRef=\"sh\" />\n" +
+                "    <userTask id=\"sh\" name=\"审核\" activiti:assignee=\"${shUser}\" activiti:candidateGroups=\"${org}\">\n" +
+                "      <incoming>Flow_1xex6al</incoming>\n" +
+                "      <outgoing>Flow_000uhqe</outgoing>\n" +
+                "    </userTask>\n" +
+                "    <endEvent id=\"end\" name=\"结束\">\n" +
+                "      <incoming>Flow_000uhqe</incoming>\n" +
+                "    </endEvent>\n" +
+                "    <sequenceFlow id=\"Flow_000uhqe\" sourceRef=\"sh\" targetRef=\"end\" />\n" +
                 "  </process>\n" +
                 "  <bpmndi:BPMNDiagram id=\"BpmnDiagram_1\">\n" +
-                "    <bpmndi:BPMNPlane id=\"BpmnPlane_1\" bpmnElement=\"testFlow\">\n" +
+                "    <bpmndi:BPMNPlane id=\"BpmnPlane_1\" bpmnElement=\"holiday\">\n" +
+                "      <bpmndi:BPMNEdge id=\"Flow_000uhqe_di\" bpmnElement=\"Flow_000uhqe\">\n" +
+                "        <omgdi:waypoint x=\"560\" y=\"120\" />\n" +
+                "        <omgdi:waypoint x=\"682\" y=\"120\" />\n" +
+                "      </bpmndi:BPMNEdge>\n" +
+                "      <bpmndi:BPMNEdge id=\"Flow_1xex6al_di\" bpmnElement=\"Flow_1xex6al\">\n" +
+                "        <omgdi:waypoint x=\"340\" y=\"120\" />\n" +
+                "        <omgdi:waypoint x=\"460\" y=\"120\" />\n" +
+                "      </bpmndi:BPMNEdge>\n" +
                 "      <bpmndi:BPMNEdge id=\"SequenceFlow_0h21x7r_di\" bpmnElement=\"SequenceFlow_0h21x7r\">\n" +
                 "        <omgdi:waypoint x=\"188\" y=\"120\" />\n" +
                 "        <omgdi:waypoint x=\"240\" y=\"120\" />\n" +
                 "      </bpmndi:BPMNEdge>\n" +
-                "      <bpmndi:BPMNEdge id=\"Flow_0mnt4ho_di\" bpmnElement=\"Flow_0mnt4ho\">\n" +
-                "        <omgdi:waypoint x=\"340\" y=\"120\" />\n" +
-                "        <omgdi:waypoint x=\"392\" y=\"120\" />\n" +
-                "      </bpmndi:BPMNEdge>\n" +
-                "      <bpmndi:BPMNShape id=\"StartEvent_1y45yut_di\" bpmnElement=\"StartEvent_1y45yut\">\n" +
+                "      <bpmndi:BPMNShape id=\"StartEvent_1y45yut_di\" bpmnElement=\"start\">\n" +
                 "        <omgdc:Bounds x=\"152\" y=\"102\" width=\"36\" height=\"36\" />\n" +
                 "        <bpmndi:BPMNLabel>\n" +
-                "          <omgdc:Bounds x=\"160\" y=\"145\" width=\"22\" height=\"14\" />\n" +
+                "          <omgdc:Bounds x=\"160\" y=\"145\" width=\"23\" height=\"14\" />\n" +
                 "        </bpmndi:BPMNLabel>\n" +
                 "      </bpmndi:BPMNShape>\n" +
-                "      <bpmndi:BPMNShape id=\"Task_1hcentk_di\" bpmnElement=\"test\">\n" +
+                "      <bpmndi:BPMNShape id=\"Activity_1o4tw34_di\" bpmnElement=\"sc\">\n" +
                 "        <omgdc:Bounds x=\"240\" y=\"80\" width=\"100\" height=\"80\" />\n" +
                 "      </bpmndi:BPMNShape>\n" +
-                "      <bpmndi:BPMNShape id=\"Event_11k45g9_di\" bpmnElement=\"Event_11k45g9\">\n" +
-                "        <omgdc:Bounds x=\"392\" y=\"102\" width=\"36\" height=\"36\" />\n" +
+                "      <bpmndi:BPMNShape id=\"Activity_01bt4tv_di\" bpmnElement=\"sh\">\n" +
+                "        <omgdc:Bounds x=\"460\" y=\"80\" width=\"100\" height=\"80\" />\n" +
+                "      </bpmndi:BPMNShape>\n" +
+                "      <bpmndi:BPMNShape id=\"Event_0jgcqxp_di\" bpmnElement=\"end\">\n" +
+                "        <omgdc:Bounds x=\"682\" y=\"102\" width=\"36\" height=\"36\" />\n" +
+                "        <bpmndi:BPMNLabel>\n" +
+                "          <omgdc:Bounds x=\"689\" y=\"145\" width=\"23\" height=\"14\" />\n" +
+                "        </bpmndi:BPMNLabel>\n" +
                 "      </bpmndi:BPMNShape>\n" +
                 "    </bpmndi:BPMNPlane>\n" +
                 "  </bpmndi:BPMNDiagram>\n" +
                 "</definitions>\n";
         //使用RepositoryService进行部署
-        repositoryService.createDeployment()
+        Deployment dev = repositoryService.createDeployment()
                 .category(category)//类别
                 .key(key)//唯一编码
                 .name(name)//名称
                 .addString("bpmn", bpmn)//xml
                 .deploy();
-        TActBytearrayVersion tActBytearrayVersion=new TActBytearrayVersion();
-        tActBytearrayVersion.setFlowKey(key);
-        tActBytearrayVersion.setName(name);
-        tActBytearrayVersion.setCategory(category);
-        tActBytearrayVersion.setBytes(bpmn.getBytes());
-        tActBytearrayVersionMapper.insert(tActBytearrayVersion);
+        TActDeployment tActDeployment=new TActDeployment();
+        tActDeployment.setDevKey(key);
+        tActDeployment.setCategory(category);
+        tActDeployment.setDevName(name);
+        tActDeployment.setDevId(dev.getId());
+        tActDeploymentMapper.insert(tActDeployment);
         return ResponseBean.success();
     }
     /**
@@ -108,25 +129,19 @@ public class FlowDefService implements IFlowDefService {
     public ResponseBean updateProcess(Map<String, Object> map) throws Exception {
         String bpmn=(String) map.get("bpmn");
         String key=(String) map.get("key");
-        DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
-        deploymentQuery.deploymentKey(key);
-        Deployment deployment = deploymentQuery.singleResult();
-        String category=deployment.getCategory();
-        String name=deployment.getName();
-        repositoryService.deleteDeployment(deployment.getId());
-        repositoryService.createDeployment()
+        String category=(String) map.get("category");
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("dev_key",key);
+        TActDeployment tActDeployment = tActDeploymentMapper.selectOne(queryWrapper);
+        Deployment dev = repositoryService.createDeployment()
                 .category(category)//类别
                 .key(key)//唯一编码
-                .name(name)//名称
-                .tenantId(key)
+                .name(tActDeployment.getDevName())//名称
                 .addString("bpmn", bpmn)//xml
                 .deploy();
-        TActBytearrayVersion tActBytearrayVersion=new TActBytearrayVersion();
-        tActBytearrayVersion.setFlowKey(key);
-        tActBytearrayVersion.setName(name);
-        tActBytearrayVersion.setCategory(category);
-        tActBytearrayVersion.setBytes(bpmn.getBytes());
-        tActBytearrayVersionMapper.insert(tActBytearrayVersion);
+
+        tActDeployment.setDevId(dev.getId());
+        tActDeploymentMapper.updateById(tActDeployment);
         return ResponseBean.success();
     }
     /**
@@ -141,27 +156,24 @@ public class FlowDefService implements IFlowDefService {
         String category=(String) map.get("category");
         String key=(String) map.get("key");
         String name=(String) map.get("name");
-        DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
+        QueryWrapper queryWrapper=new QueryWrapper();
         if(BaseUtils.isNotNull(category)){
-            deploymentQuery.deploymentCategoryLike(category);
+            queryWrapper.like("category",category);
         }
         if(BaseUtils.isNotNull(key)){
-            deploymentQuery.deploymentKeyLike(key);
+            queryWrapper.like("dev_key",key);
         }
         if(BaseUtils.isNotNull(name)){
-            deploymentQuery.deploymentNameLike(name);
+            queryWrapper.like("dev_name",name);
         }
-        List<Deployment> list = deploymentQuery.list();
-        list.sort((Deployment o1, Deployment o2)->{
-            return o1.getCategory().compareTo(o2.getCategory());
-        });
+        List<TActDeployment> list = tActDeploymentMapper.selectList(queryWrapper);
         List<Map<String,Object>> rtnMap=new ArrayList<Map<String,Object>>();
-        for (Deployment deployment : list) {
+        for (TActDeployment tActDeployment : list) {
             Map<String,Object> res = new HashMap<>();
-            res.put("id",deployment.getId());
-            res.put("category",deployment.getCategory());
-            res.put("key",deployment.getKey());
-            res.put("name",deployment.getName());
+            res.put("id",tActDeployment.getId());
+            res.put("category",tActDeployment.getCategory());
+            res.put("key",tActDeployment.getDevKey());
+            res.put("name",tActDeployment.getDevName());
             rtnMap.add(res);
         }
         return ResponseBean.success(rtnMap);
@@ -176,10 +188,13 @@ public class FlowDefService implements IFlowDefService {
     @Override
     public ResponseBean queryFlowDefXml(Map<String, Object> map) throws Exception {
         String key=(String) map.get("key");
-        Deployment deployment = repositoryService.createDeploymentQuery().deploymentKey(key).singleResult();
-        InputStream bpmnInput = repositoryService.getResourceAsStream(deployment.getId(), "bpmn");
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("dev_key",key);
+        TActDeployment tActDeployment = tActDeploymentMapper.selectOne(queryWrapper);
+        InputStream bpmnInput = repositoryService.getResourceAsStream(tActDeployment.getDevId(), "bpmn");
         String bpmn = IoUtils.inputStreamToString(bpmnInput);
         return ResponseBean.success(bpmn);
+
     }
     /**
      *删除流程定义
@@ -196,7 +211,44 @@ public class FlowDefService implements IFlowDefService {
         for (Deployment deployment : list) {
             repositoryService.deleteDeployment(deployment.getId());
         }
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("dev_key",key);
+        tActDeploymentMapper.delete(queryWrapper);
         return ResponseBean.success();
+    }
+    /**
+     *查询全部流程定义并转换成树
+     *@param map
+     *@Return:com.bubbling.frame.base.bean.ResponseBean
+     *@Author:dc_yangwen
+     *@Date:2021-05-17 21:07
+     */
+    @Override
+    public ResponseBean queryAllFlowDef(Map<String, Object> map) throws Exception {
+        QueryWrapper queryWrapper=new QueryWrapper();
+        List<TActDeployment> list = tActDeploymentMapper.selectList(queryWrapper);
+        TreeMap<String,String> treeMap=new TreeMap<>();
+        for (TActDeployment deployment : list) {
+            treeMap.put(deployment.getCategory(),"");
+        }
+        List<Map<String,Object>> rtnMap=new ArrayList<Map<String,Object>>();
+        Map<String,Object> res;
+        for (Map.Entry<String, String> stringStringEntry : treeMap.entrySet()) {
+            res = new HashMap<>();
+            res.put("id",stringStringEntry.getKey());
+            res.put("category","1");
+            res.put("name",stringStringEntry.getKey());
+            rtnMap.add(res);
+        }
+        for (TActDeployment deployment : list) {
+            res = new HashMap<>();
+            res.put("id",deployment.getId());
+            res.put("category",deployment.getCategory());
+            res.put("key",deployment.getDevKey());
+            res.put("name",deployment.getDevName());
+            rtnMap.add(res);
+        }
+        return ResponseBean.success(rtnMap);
     }
 
 }

@@ -58,13 +58,15 @@ export default {
       this.$refs.flowTable.cleanSlect();
     },
     add(){
-      const param=this.flowInfo;
-      this.axios.post("/proxyService/flowDefService/deploymentProcess",param).then((res)=>{
-        if(res.rtnCode==200){
-          this.addVisible=false;
-          this.query();
-          this.$message.success("添加成功");
-        }
+      this.$refs.form.validate().then(() => {
+        const param=this.flowInfo;
+        this.axios.post("/proxyService/flowDefService/deploymentProcess",param).then((res)=>{
+          if(res.rtnCode==200){
+            this.addVisible=false;
+            this.query();
+            this.$message.success("添加成功");
+          }
+        })
       })
     },
     query(){
@@ -78,9 +80,9 @@ export default {
     },
     showUpdate(){
       if(this.flowInfo.id!=null){
-        window.open("/designer?key="+this.flowInfo.key);
+        window.open("/designer?key="+this.flowInfo.key+"&category="+this.flowInfo.category);
       }else{
-        this.$message.error("请选择流程")
+        this.$message.warning("请选择流程")
       }
 
     },

@@ -29,6 +29,7 @@ export default {
       container: null,
       canvas: null,
       key:null,
+      category:null,
     }
   },
   mounted() {
@@ -52,7 +53,7 @@ export default {
         customTranslateModule,
       ],
       moddleExtensions: {
-        activiti: activitiModdleDescriptor
+        camunda: activitiModdleDescriptor
       }
     })
     this.createNewDiagram();
@@ -62,11 +63,13 @@ export default {
     createNewDiagram(){
       var query=this.$route.query;
       this.key=query.key;
+      this.category=query.category;
       const param={};
       param.key=this.key;
       this.axios.post("/proxyService/flowDefService/queryFlowDefXml",param).then((res)=>{
         if(res.rtnCode==200){
-          viewer.importXML(res.data, (err)=>{
+          let xml=this.createXml(res.data);
+          viewer.importXML(xml, (err)=>{
             if (!err) {
               viewer.get('canvas').zoom('fit-viewport')
             } else {
@@ -99,9 +102,11 @@ export default {
     },
     deploymentProcess(){
       viewer.saveXML({ format: true }, (err, xml) =>{
+        xml=this.formXML(xml);
         const param={}
         param.bpmn=xml;
         param.key=this.key;
+        param.category=this.category;
         this.axios.post("/proxyService/flowDefService/updateProcess",param).then((res)=>{
           if(res.rtnCode==200){
             this.$message.success("部署成功")
@@ -109,9 +114,26 @@ export default {
         })
       });
     },
+    formXML(data){
+      let temp=data;
+      temp = data.replace(/camunda/ig,"activiti");
+      temp = temp.replace(/FormField/ig,'formProperty');
+      temp=temp.replace(/<definitions.*?>/,
+          '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1621667210359" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">');
+      return temp ;
+    },
+    createXml(data){
+      let temp=data;
+      temp = data.replace(/activiti/ig,"camunda");
+      temp = temp.replace(/formProperty/ig,'FormField');
+      temp=temp.replace(/<definitions.*?>/,
+          '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="sid-38422fae-e03e-43a3-bef4-bd33b32041b2" targetNamespace="http://bpmn.io/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="5.1.2">')
+      return temp ;
+    },
     saveDiagram(){
       const downloadLink = this.$refs.saveDiagram
       viewer.saveXML({ format: true }, (err, xml) =>{
+        xml=this.formXML(xml);
         this.download(downloadLink,"Diagram.xml",xml)
       });
     },

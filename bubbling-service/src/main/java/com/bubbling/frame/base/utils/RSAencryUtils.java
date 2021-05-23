@@ -16,6 +16,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -29,8 +30,8 @@ import javax.crypto.NoSuchPaddingException;
  * @ignore
  */
 public class RSAencryUtils {
-    public static Map<String, String> rsaMap=new HashMap<>();
-    public static Map<String, Long> rsaTimeOutMap=new HashMap<>();
+    public static ConcurrentHashMap<String, String> rsaMap=new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Long> rsaTimeOutMap=new ConcurrentHashMap<>();
     public static void main(String[] args) {
         //生成公钥和私钥
         String[] strings = genKeyPair();

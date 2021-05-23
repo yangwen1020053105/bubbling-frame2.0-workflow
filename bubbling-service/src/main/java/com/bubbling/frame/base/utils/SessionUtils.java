@@ -3,6 +3,7 @@ package com.bubbling.frame.base.utils;
 import com.bubbling.frame.entity.TAcUser;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @title: SessionUtils
@@ -13,7 +14,7 @@ import java.util.*;
 public class SessionUtils {
 
     //登录后存放token和user
-    public static Map<String, TAcUser> sessionMap=new HashMap<>();
+    public static ConcurrentHashMap<String, TAcUser> sessionMap=new ConcurrentHashMap<>();
     public static void setUser(String token,TAcUser user){
         sessionMap.put(token,user);
     }
@@ -21,7 +22,7 @@ public class SessionUtils {
         return sessionMap.get(token);
     }
     //存放token过期时间
-    public static Map<String, Long> sessionTimeOutMap=new HashMap<>();
+    public static ConcurrentHashMap<String, Long> sessionTimeOutMap=new ConcurrentHashMap<>();
     public static void setSessionTimeOut(Long timeOut,String token){
         sessionTimeOutMap.put(token,timeOut);
     }

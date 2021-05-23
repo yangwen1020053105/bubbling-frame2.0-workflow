@@ -30,8 +30,28 @@ public interface IFlowDefService {
      *@Date:2021-05-16 15:32
      */
     ResponseBean queryFlowDef(Map<String, Object> map) throws Exception;
-
+    /**
+     *获取流程xml
+     *@param map id:流程定义id
+     *@Return:com.bubbling.frame.base.bean.ResponseBean
+     *@Author:dc_yangwen
+     *@Date:2021-05-16 16:18
+     */
     ResponseBean queryFlowDefXml(Map<String, Object> map) throws Exception;
-
+    /**
+     *删除流程定义
+     *@param map
+     *@Return:com.bubbling.frame.base.bean.ResponseBean
+     *@Author:dc_yangwen
+     *@Date:2021-05-16 17:12
+     */
     ResponseBean delFlowDef(Map<String, Object> map) throws Exception;
+    /**
+     *查询全部流程定义并转换成树
+     *@param map
+     *@Return:com.bubbling.frame.base.bean.ResponseBean
+     *@Author:dc_yangwen
+     *@Date:2021-05-17 21:07
+     */
+    ResponseBean queryAllFlowDef(Map<String, Object> map) throws Exception;
 }

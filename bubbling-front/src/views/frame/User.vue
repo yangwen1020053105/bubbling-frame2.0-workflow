@@ -17,6 +17,7 @@
         </b-table-header>
         <!--用户数据表        -->
         <b-data-table ref="userTable" :columns="[
+        {title: 'id',dataIndex: 'id',},
         {title: '登录名',dataIndex: 'loginName',},
         {title: '姓名',dataIndex: 'userName',},
         {title: '性别',dataIndex: 'sex',customRender:function({text}){if(text=='1'){return '男';}else{return '女';}}},
@@ -174,7 +175,7 @@ export default {
           },
         });
       }else{
-        this.$message.error("请选择用户")
+        this.$message.warning("请选择用户")
       }
     },
     showSetRole(){
