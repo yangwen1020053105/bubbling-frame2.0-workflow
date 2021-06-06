@@ -1,39 +1,73 @@
 # bubbling-frame2.0-workflow
 
-#### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+##  介绍  ##
 
-#### 软件架构
-软件架构说明
+bubbling@frame2.0,开箱即用的后台管理系统。
 
+##  软件架构  ##
 
-#### 安装教程
+语言：java
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+前端：Antdvue+Bpmn.js
 
-#### 使用说明
+后端：SpringBoot+MybatiesPlus+Activiti7
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+##  演示地址
 
-#### 参与贡献
+开放时间9:00-23:00
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+http://yangwen.i234.me:8084
 
+账号admin
 
-#### 特技
+密码111111
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+##  效果图
+
+1. 流程定义
+
+   
+
+2. 登录
+
+![](https://gitee.com/yanwen1020053105/md-image/raw/master/bubbling-frame2.0/%E7%99%BB%E5%BD%95.png)
+
+2. 用户管理
+
+![](https://gitee.com/yanwen1020053105/md-image/raw/master/bubbling-frame2.0/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png)
+
+3. 部门管理
+
+![](https://gitee.com/yanwen1020053105/md-image/raw/master/bubbling-frame2.0/%E9%83%A8%E9%97%A8%E7%AE%A1%E7%90%86.png)
+
+4. 角色管理
+
+![](https://gitee.com/yanwen1020053105/md-image/raw/master/bubbling-frame2.0/%E8%A7%92%E8%89%B2%E7%AE%A1%E7%90%86.png)
+
+5. 菜单管理
+
+![](https://gitee.com/yanwen1020053105/md-image/raw/master/bubbling-frame2.0/%E8%8F%9C%E5%8D%95%E7%AE%A1%E7%90%86.png)
+
+##  安装教程
+
+###  后端运行（bubbling-service）
+
+1.  使用git将项目克隆到本地
+2.  创建数据库并执行数据库脚本bubbling-frame2.0\db\bubbling_frame2.0.sql
+3.  修改bubbling-frame2.0\bubbling-service\src\main\resources\application.properties为spring.profiles.active=prod
+4.  修改bubbling-frame2.0\bubbling-service\src\main\resources\application-prod.properties的数据库连接及用户名密码
+5.  运行bubbling-frame2.0\bubbling-service\src\main\java\com\bubbling\BubblingMain.java
+
+###  前端运行（bubbling-front）
+
+1. 安装webstorm或HBuilder
+2. 安装node.js、cnpm、yarn
+3. 打开cmd命令窗口，进入bubbling-front目录
+4. 执行yarn install安装依赖
+5. 导入项目到ide
+6. 在ide中运行或者执行yarn run serve命令
+
+##  使用说明
+
+1.  访问http://127.0.0.1:8083/login.html 用户名admin密码111111
+2.  使用了antdvueAdmin登录界面的矢量背景图，https://gitee.com/iczer/vue-antd-admin#https://iczer.gitee.io/vue-antd-admin
