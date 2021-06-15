@@ -20,13 +20,12 @@ const router = createRouter({
         {path: '/designer', component: Designer},
         {path: '/home', component: home,
             children: [
-                //测试页面
-                {path: 'func', component: func},
-                {path: 'org', component: org},
-                {path: 'role', component: role},
-                {path: 'user', component: user},
-                {path: 'flowDef', component: FlowDef},
-                {path: 'flowInst', component: FlowInst},
+                {path: 'func', component: func,meta: {notCache: false}},
+                {path: 'org', component: org,meta: {notCache: false}},
+                {path: 'role', component: role,meta: {notCache: false}},
+                {path: 'user', component: user,meta: {notCache: false}},
+                {path: 'flowDef', component: FlowDef,meta: {notCache: false}},
+                {path: 'flowInst', component: FlowInst,meta: {notCache: false}},
             ]
         },
 

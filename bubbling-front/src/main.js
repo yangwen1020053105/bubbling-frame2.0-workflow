@@ -6,6 +6,7 @@ import { message } from 'ant-design-vue';
 import { notification } from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.less';
 import global from "@/global";
+import './global.less'
 import axiosF from 'axios';
 import VueAxios from 'vue-axios';
 import Cookies from 'js-cookie';
@@ -39,7 +40,6 @@ axios.interceptors.request.use(function (config) {
 })
 // 添加响应拦截器
 axios.interceptors.response.use(function (response) {
-    console.log(response)
     // 对响应数据做点什么
     if(response.data==1100||response.data.rtnCode==1100){
         //未登录跳转登录界面

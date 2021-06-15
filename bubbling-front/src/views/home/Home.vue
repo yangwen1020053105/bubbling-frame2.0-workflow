@@ -33,7 +33,13 @@
       </a-tabs>
       <a-divider style="height: 0.5px;margin:-16px 0px 0px 0px;background-color: #fff" />
       <a-layout-content :style="{ padding: '10px 0px 0px 10px', background: '#f0f2f5', minHeight: '280px' }">
-        <router-view ></router-view>
+        <router-view v-slot="{ Component }" >
+          <transition>
+            <keep-alive >
+              <component :is="Component" />
+            </keep-alive>
+          </transition>
+        </router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -158,6 +164,8 @@ export default defineComponent({
           //最后一个tab不允许删除
           this.changePage("/home");
         }
+        //清除缓存
+        console.log(this.cacheList)
         //删除tab
         this.panes.splice(num,1);
       }
